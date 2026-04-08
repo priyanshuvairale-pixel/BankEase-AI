@@ -2,7 +2,6 @@
 # Author: Priyanshu
 # Purpose: Book bank appointments and handle small banking services
 
-import datetime
 import sys
 import io
 
@@ -14,15 +13,16 @@ class BankEaseAgent:
         self.appointments = []
         self.requests = []
 
-    def book_appointment(self, branch, date, time):
+    def book_appointment(self, branch, date, time, mode="Physical"):
         appointment = {
             "branch": branch,
             "date": date,
             "time": time,
+            "mode": mode,
             "status": "Confirmed"
         }
         self.appointments.append(appointment)
-        return f"✅ Appointment booked at {branch} on {date} at {time}."
+        return f"✅ {mode} appointment booked at {branch} on {date} at {time}."
 
     def apply_debit_card(self, account_number):
         request = {
@@ -69,38 +69,45 @@ def main():
 
     while True:
         print("\nChoose an option:")
-        print("1. Book Appointment")
-        print("2. Apply for Debit Card")
-        print("3. Request Passbook")
-        print("4. Update KYC")
-        print("5. View Service Status")
-        print("6. Exit")
+        print("1. Book Physical Appointment")
+        print("2. Book Online Appointment")
+        print("3. Apply for Debit Card")
+        print("4. Request Passbook")
+        print("5. Update KYC")
+        print("6. View Service Status")
+        print("7. Exit")
 
-        choice = input("Enter choice (1-6): ")
+        choice = input("Enter choice (1-7): ")
 
         if choice == "1":
             branch = input("Enter branch name: ")
             date = input("Enter date (YYYY-MM-DD): ")
             time = input("Enter time (e.g., 11:00 AM): ")
-            print(agent.book_appointment(branch, date, time))
+            print(agent.book_appointment(branch, date, time, mode="Physical"))
 
         elif choice == "2":
-            acc = input("Enter account number: ")
-            print(agent.apply_debit_card(acc))
+            branch = input("Enter branch name (for online service center): ")
+            date = input("Enter date (YYYY-MM-DD): ")
+            time = input("Enter time (e.g., 11:00 AM): ")
+            print(agent.book_appointment(branch, date, time, mode="Online"))
 
         elif choice == "3":
             acc = input("Enter account number: ")
-            print(agent.request_passbook(acc))
+            print(agent.apply_debit_card(acc))
 
         elif choice == "4":
+            acc = input("Enter account number: ")
+            print(agent.request_passbook(acc))
+
+        elif choice == "5":
             acc = input("Enter account number: ")
             docs = input("Enter documents (comma separated): ").split(",")
             print(agent.update_kyc(acc, docs))
 
-        elif choice == "5":
+        elif choice == "6":
             print("\nService Status:\n", agent.view_status())
 
-        elif choice == "6":
+        elif choice == "7":
             print("Thank you for using BankEase AI Agent. Goodbye!")
             break
 
@@ -110,3 +117,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
